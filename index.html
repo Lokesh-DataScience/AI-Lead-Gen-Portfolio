@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autonomous Lead Agent — AI-Powered Lead Generation for Freelancers</title>
+<meta name="description" content="Find real local businesses, research them, and send personalized outreach automatically. Built for freelancers who'd rather close deals than cold-search.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          sans: ['Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+          zinc: {
+            50: '#fafafa', 100: '#f4f4f5', 200: '#e4e4e7', 300: '#d4d4d8',
+            400: '#a1a1aa', 500: '#71717a', 600: '#52525b', 700: '#3f3f46',
+            800: '#27272a', 900: '#18181b', 950: '#09090b',
+          },
+          indigo: {
+            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+            400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+            900: '#312e81', 950: '#1e1b4b',
+          },
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1.visible { transition-delay: 0.1s; }
+  .reveal-delay-2.visible { transition-delay: 0.2s; }
+  .reveal-delay-3.visible { transition-delay: 0.3s; }
+
+  /* ---------- Ambient hero glow ---------- */
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -20px) scale(1.08); }
+  }
+  .glow-1 { animation: drift 14s ease-in-out infinite; }
+  .glow-2 { animation: drift 18s ease-in-out infinite reverse; }
+
+  /* ---------- Live stepper mockup (the signature element) ---------- */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .step-line { opacity: 0; animation: fadeSlideIn 0.5s ease-out forwards; }
+  .cursor-blink { animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---------- Marquee for "how it works" connecting line ---------- */
+  @keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+  .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+
+  /* ---------- linear text ---------- */
+  .linear-text {
+    background: linear-linear(120deg, #4f46e5, #818cf8, #4f46e5);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body class="bg-zinc-50 text-zinc-900 antialiased overflow-x-hidden">
+
+<!-- ============ NAV ============ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-200/70">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm shadow-indigo-600/30">
+        <svg class="w-4.5 h-4.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2 4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3Z"/></svg>
+      </div>
+      <span class="font-display font-bold text-sm tracking-tight">Autonomous<span class="text-indigo-600">Lead</span></span>
+    </div>
+    <nav class="hidden md:flex items-center gap-8 text-[13px] font-semibold text-zinc-600">
+      <a href="#how" class="hover:text-zinc-950 transition-colors">How it works</a>
+      <a href="#demo" class="hover:text-zinc-950 transition-colors">Demo</a>
+      <a href="#features" class="hover:text-zinc-950 transition-colors">Features</a>
+      <a href="#pricing" class="hover:text-zinc-950 transition-colors">Pricing</a>
+      <a href="#experience" class="hover:text-zinc-950 transition-colors">Reviews</a>
+    </nav>
+    <a href="#pricing" class="text-[13px] font-bold bg-zinc-950 text-white px-4 py-2 rounded-xl hover:bg-zinc-800 transition-all">
+      Get Started Free
+    </a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="relative pt-40 pb-28 px-6 overflow-hidden">
+  <div class="absolute -top-20 -left-20 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl glow-1"></div>
+  <div class="absolute top-40 -right-20 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl glow-2"></div>
+
+  <div class="relative max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+
+    <div>
+      <div class="inline-flex items-center gap-1.5 bg-white border border-zinc-200 rounded-full px-3 py-1.5 text-[11px] font-mono font-bold uppercase tracking-widest text-zinc-500 shadow-sm mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot"></span>
+        AI Agent · Live &amp; Working
+      </div>
+
+      <h1 class="font-display text-[2.75rem] leading-[1.05] md:text-6xl font-bold tracking-tight text-zinc-950">
+        Stop cold-searching.<br>
+        <span class="linear-text">Let the agent</span><br>
+        find your next client.
+      </h1>
+
+      <p class="mt-6 text-lg text-zinc-600 leading-relaxed max-w-lg">
+        Describe who you want to reach — <span class="font-mono text-zinc-950 bg-zinc-100 px-1.5 py-0.5 rounded text-[15px]">"cafes in Bilaspur"</span> — and watch it search the web, research each business, write a personalized email, and send it. All reviewed by you before it goes out.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <a href="#pricing" class="group bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2">
+          Start free — 1 lead on us
+          <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#demo" class="text-sm font-bold text-zinc-700 hover:text-zinc-950 flex items-center gap-2 px-2 transition-colors">
+          <span class="w-9 h-9 rounded-full border-2 border-zinc-300 flex items-center justify-center">
+            <svg class="w-3.5 h-3.5 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          Watch 60-sec demo
+        </a>
+      </div>
+
+      <p class="mt-8 text-[11px] font-mono uppercase tracking-widest text-zinc-400 font-bold">
+        No credit card · Human-approved before every send · GDPR &amp; CAN-SPAM aware
+      </p>
+    </div>
+
+    <!-- Signature element: animated live-agent stepper mockup -->
+    <div class="reveal visible relative">
+      <div class="absolute -inset-4 bg-linear-to-tr from-indigo-500/20 to-amber-400/10 rounded-4xl blur-2xl"></div>
+      <div class="relative bg-zinc-950 rounded-2xl shadow-2xl shadow-zinc-950/30 border border-zinc-800 overflow-hidden">
+
+        <!-- fake browser chrome -->
+        <div class="flex items-center gap-1.5 px-4 py-3 border-b border-zinc-800">
+          <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+          <span class="ml-3 text-[10px] font-mono text-zinc-500">campaign · cafes in bilaspur</span>
+        </div>
+
+        <div class="p-5 space-y-2 font-mono text-[12px]" id="stepper">
+          <!-- populated by JS -->
+        </div>
+
+        <div class="px-5 pb-5">
+          <div class="flex items-center gap-2 text-[11px] font-mono text-indigo-400">
+            <svg class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+            <span>thinking<span class="cursor-blink">_</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ LOGOS / TRUST STRIP ============ -->
+<section class="border-y border-zinc-200 bg-white py-6">
+  <div class="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-[11px] font-mono font-bold uppercase tracking-widest text-zinc-400">
+    <span>Real web search</span>
+    <span class="w-1 h-1 rounded-full bg-zinc-300"></span>
+    <span>Real inboxes</span>
+    <span class="w-1 h-1 rounded-full bg-zinc-300"></span>
+    <span>Real replies detected</span>
+    <span class="w-1 h-1 rounded-full bg-zinc-300"></span>
+    <span>Never the same lead twice</span>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how" class="py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center max-w-xl mx-auto mb-16">
+      <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-indigo-600 mb-3">The Pipeline</p>
+      <h2 class="font-display text-4xl font-bold tracking-tight text-zinc-950">Four steps. Zero manual searching.</h2>
+    </div>
+
+    <div class="relative grid md:grid-cols-4 gap-8">
+      <div class="hidden md:block absolute top-7 left-[12.5%] right-[12.5%] h-px bg-linear-to-r from-indigo-200 via-indigo-400 to-indigo-200"></div>
+
+      <div class="reveal reveal-delay-1 relative">
+        <div class="w-14 h-14 rounded-2xl bg-white border-2 border-indigo-200 shadow-sm flex items-center justify-center text-indigo-600 font-display font-bold mb-4 relative z-10">01</div>
+        <h3 class="font-display font-bold text-base mb-1.5">Search</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Tell it who you're targeting in plain English. It searches the live web to find real, active businesses.</p>
+      </div>
+      <div class="reveal reveal-delay-2 relative">
+        <div class="w-14 h-14 rounded-2xl bg-white border-2 border-indigo-200 shadow-sm flex items-center justify-center text-indigo-600 font-display font-bold mb-4 relative z-10">02</div>
+        <h3 class="font-display font-bold text-base mb-1.5">Research</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Digs into each business — services, recent news, contact channels — so the pitch is never generic.</p>
+      </div>
+      <div class="reveal reveal-delay-3 relative">
+        <div class="w-14 h-14 rounded-2xl bg-white border-2 border-indigo-200 shadow-sm flex items-center justify-center text-indigo-600 font-display font-bold mb-4 relative z-10">03</div>
+        <h3 class="font-display font-bold text-base mb-1.5">Personalize</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Writes a short, specific email referencing what it actually found — not a mail-merge template.</p>
+      </div>
+      <div class="reveal relative" style="transition-delay: 0.4s">
+        <div class="w-14 h-14 rounded-2xl bg-white border-2 border-indigo-200 shadow-sm flex items-center justify-center text-indigo-600 font-display font-bold mb-4 relative z-10">04</div>
+        <h3 class="font-display font-bold text-base mb-1.5">You approve, it sends</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Nothing goes out without your review. Replies get auto-classified when they land.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMO VIDEO ============ -->
+<section id="demo" class="py-24 px-6 bg-zinc-950 relative overflow-hidden">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-75 bg-indigo-600/20 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-4xl mx-auto text-center">
+    <div class="reveal">
+      <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-indigo-400 mb-3">See It Run</p>
+      <h2 class="font-display text-4xl font-bold tracking-tight text-white mb-4">60 seconds. One real campaign.</h2>
+      <p class="text-zinc-400 max-w-lg mx-auto mb-12">Watch the agent go from a plain-English search to a sent, personalized email — start to finish.</p>
+    </div>
+
+    <div class="reveal reveal-delay-1 relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900 aspect-video">
+      <!--
+        ▶ TO ADD YOUR DEMO VIDEO:
+        Place your video file (e.g. "demo.mp4") in the SAME FOLDER as this
+        index.html, then it will play automatically — no other setup needed.
+
+        If you'd rather host it on YouTube instead (recommended if the file
+        is large, since most static hosts have upload size limits), delete
+        the <video> block below and uncomment the <iframe> block instead,
+        replacing YOUTUBE_VIDEO_ID with your actual video's ID.
+      -->
+      <video
+        class="w-full h-full object-cover"
+        controls
+        poster=""
+        preload="metadata"
+      >
+        <source src="demo.mp4" type="video/mp4">
+        Your browser doesn't support embedded video — <a href="demo.mp4" class="underline text-indigo-400">download it here</a> instead.
+      </video>
+
+      <!--
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/YOUTUBE_VIDEO_ID"
+        title="Autonomous Lead Agent Demo"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features" class="py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center max-w-xl mx-auto mb-16">
+      <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-indigo-600 mb-3">Built For This</p>
+      <h2 class="font-display text-4xl font-bold tracking-tight text-zinc-950">Everything a real outreach workflow needs.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+
+      <div class="reveal reveal-delay-1 group p-6 bg-white rounded-2xl border border-zinc-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <h3 class="font-display font-bold text-base mb-1.5">Never the same lead twice</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Every business you've already found is remembered — re-running a search always surfaces something new.</p>
+      </div>
+
+      <div class="reveal reveal-delay-2 group p-6 bg-white rounded-2xl border border-zinc-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+        </div>
+        <h3 class="font-display font-bold text-base mb-1.5">Real emails, actually sent</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Not a mockup — outreach genuinely lands in the lead's inbox, from your name, replies routed back to you.</p>
+      </div>
+
+      <div class="reveal reveal-delay-3 group p-6 bg-white rounded-2xl border border-zinc-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 class="font-display font-bold text-base mb-1.5">Replies, auto-classified</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Interested, meeting booked, or not interested — sorted the moment a reply lands, no manual tagging.</p>
+      </div>
+
+      <div class="reveal reveal-delay-1 group p-6 bg-white rounded-2xl border border-zinc-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3Z"/></svg>
+        </div>
+        <h3 class="font-display font-bold text-base mb-1.5">Human-in-the-loop, always</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Every draft is yours to edit or reject. Rate limits keep your sending reputation safe by default.</p>
+      </div>
+
+      <div class="reveal reveal-delay-2 group p-6 bg-white rounded-2xl border border-zinc-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+        </div>
+        <h3 class="font-display font-bold text-base mb-1.5">Full activity trace</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Watch the agent think in real time, or dig into the audit log for every search, draft, and send.</p>
+      </div>
+
+      <div class="reveal reveal-delay-3 group p-6 bg-white rounded-2xl border border-zinc-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg>
+        </div>
+        <h3 class="font-display font-bold text-base mb-1.5">Export anytime</h3>
+        <p class="text-sm text-zinc-500 leading-relaxed">Every lead — contact info, drafts, reply data — one click to CSV whenever you want it.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing" class="py-28 px-6 bg-white border-y border-zinc-200">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal text-center max-w-xl mx-auto mb-16">
+      <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-indigo-600 mb-3">Simple Pricing</p>
+      <h2 class="font-display text-4xl font-bold tracking-tight text-zinc-950">Pay for leads, not seats.</h2>
+      <p class="mt-4 text-zinc-500">One free lead to try it. After that, buy credits — one credit, one fully-researched lead.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <div class="reveal reveal-delay-1 p-7 bg-zinc-50 rounded-2xl border border-zinc-200">
+        <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-zinc-400 mb-2">Starter</p>
+        <p class="font-display text-3xl font-bold text-zinc-950 mb-1">₹499</p>
+        <p class="text-xs text-zinc-500 mb-6">25 lead credits · ~₹20/lead</p>
+        <a href="#" class="block text-center bg-white border border-zinc-300 hover:border-zinc-950 text-zinc-950 font-bold text-sm py-3 rounded-xl transition-all">Choose Starter</a>
+      </div>
+
+      <div class="reveal reveal-delay-2 p-7 bg-zinc-950 rounded-2xl border-2 border-indigo-500 relative shadow-xl shadow-indigo-600/20 scale-[1.03]">
+        <p class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-mono font-bold uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</p>
+        <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-indigo-400 mb-2">Growth</p>
+        <p class="font-display text-3xl font-bold text-white mb-1">₹1,499</p>
+        <p class="text-xs text-zinc-400 mb-6">100 lead credits · ~₹15/lead</p>
+        <a href="#" class="block text-center bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm py-3 rounded-xl transition-all">Choose Growth</a>
+      </div>
+
+      <div class="reveal reveal-delay-3 p-7 bg-zinc-50 rounded-2xl border border-zinc-200">
+        <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-zinc-400 mb-2">Power</p>
+        <p class="font-display text-3xl font-bold text-zinc-950 mb-1">₹3,999</p>
+        <p class="text-xs text-zinc-500 mb-6">300 lead credits · ~₹13/lead</p>
+        <a href="#" class="block text-center bg-white border border-zinc-300 hover:border-zinc-950 text-zinc-950 font-bold text-sm py-3 rounded-xl transition-all">Choose Power</a>
+      </div>
+
+    </div>
+
+    <p class="reveal text-center text-[11px] font-mono uppercase tracking-widest text-zinc-400 font-bold mt-10">
+      Refer a friend → you both get 5 free credits
+    </p>
+  </div>
+</section>
+
+<!-- ============ SHARE YOUR EXPERIENCE ============ -->
+<section id="experience" class="py-28 px-6 relative overflow-hidden">
+  <div class="absolute -bottom-32 left-1/2 -translate-x-1/2 w-175 h-100 bg-amber-200/25 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-2xl mx-auto">
+    <div class="reveal text-center mb-10">
+      <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-indigo-600 mb-3">Your Turn</p>
+      <h2 class="font-display text-4xl font-bold tracking-tight text-zinc-950 mb-4">
+        Landed a client because of us? <span class="inline-block">🎉</span>
+      </h2>
+      <p class="text-zinc-500 max-w-md mx-auto">Tell us how it went — the good, the weird, the "I can't believe that actually worked." Real stories might get featured right here.</p>
+    </div>
+
+    <div class="reveal reveal-delay-1 relative">
+      <div class="absolute -inset-3 bg-linear-to-tr from-indigo-200/40 to-amber-200/40 rounded-4xl blur-xl"></div>
+
+      <!--
+        ▶ TO MAKE THIS FORM ACTUALLY COLLECT SUBMISSIONS:
+        1. Go to https://formspree.io (free — 50 submissions/month, no backend needed).
+        2. Create a form, copy the endpoint URL it gives you
+           (looks like https://formspree.io/f/xxxxxxxx).
+        3. Paste it into the form's "action" attribute below, replacing
+           YOUR_FORMSPREE_ENDPOINT.
+        Until you do that, the form still shows the success animation on
+        submit (so it never looks broken while you're setting it up), but
+        nothing is actually saved anywhere yet.
+      -->
+      <form
+        id="experience-form"
+        action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT"
+        method="POST"
+        class="relative bg-white rounded-2xl border border-zinc-200 shadow-xl p-7 space-y-5"
+      >
+        <div id="experience-form-fields" class="space-y-5">
+
+          <div class="flex items-center justify-center gap-1" id="star-rating">
+            <span class="text-[11px] font-mono font-bold uppercase tracking-widest text-zinc-400 mr-2">Rate it</span>
+            <button type="button" data-star="1" class="star-btn text-2xl text-zinc-300 hover:scale-125 transition-transform">★</button>
+            <button type="button" data-star="2" class="star-btn text-2xl text-zinc-300 hover:scale-125 transition-transform">★</button>
+            <button type="button" data-star="3" class="star-btn text-2xl text-zinc-300 hover:scale-125 transition-transform">★</button>
+            <button type="button" data-star="4" class="star-btn text-2xl text-zinc-300 hover:scale-125 transition-transform">★</button>
+            <button type="button" data-star="5" class="star-btn text-2xl text-zinc-300 hover:scale-125 transition-transform">★</button>
+            <input type="hidden" name="rating" id="rating-input" value="0">
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <input
+              type="text" name="name" required placeholder="Your name"
+              class="w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            >
+            <input
+              type="text" name="role" placeholder="What you do (optional)"
+              class="w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            >
+          </div>
+
+          <textarea
+            name="experience" required rows="4" placeholder="Tell us what happened — which lead, what worked, what surprised you..."
+            class="w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          ></textarea>
+
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
+          >
+            Share My Story
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+          </button>
+        </div>
+
+        <!-- Success state, hidden until submit -->
+        <div id="experience-success" class="hidden text-center py-6">
+          <div class="text-4xl mb-3">🎉</div>
+          <p class="font-display font-bold text-lg text-zinc-950 mb-1">Thank you!</p>
+          <p class="text-sm text-zinc-500">Your story just made our day. We might feature it right here.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="py-28 px-6 relative overflow-hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-indigo-200/40 rounded-full blur-3xl"></div>
+  <div class="relative max-w-2xl mx-auto text-center reveal">
+    <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight text-zinc-950 mb-5">
+      Your next client is one search away.
+    </h2>
+    <p class="text-zinc-500 mb-9">Free to try. No credit card. First lead's on us.</p>
+    <a href="#pricing" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-7 py-4 rounded-xl shadow-lg shadow-indigo-600/25 transition-all">
+      Start Your First Campaign
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-zinc-200 py-10 px-6">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center">
+        <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2 4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3Z"/></svg>
+      </div>
+      <span class="font-display font-bold text-sm">AutonomousLead</span>
+    </div>
+    <p class="text-[11px] font-mono uppercase tracking-widest text-zinc-400 font-bold">Compliance Guarded · Human-in-the-Loop</p>
+  </div>
+</footer>
+
+<script>
+  // ---------- Scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ---------- Hero live-stepper mockup loop ----------
+  const steps = [
+    { icon: '🔍', color: 'text-blue-400', text: 'Searching the web for "cafes in Bilaspur"...' },
+    { icon: '🕵️', color: 'text-purple-400', text: 'Researching Sparrow & Bean Cafe...' },
+    { icon: '✍️', color: 'text-indigo-400', text: 'Writing personalized email...' },
+    { icon: '📤', color: 'text-emerald-400', text: 'Dispatched to sparrowbean@example.com' },
+  ];
+
+  const stepperEl = document.getElementById('stepper');
+  let stepIndex = 0;
+  let lines = [];
+
+  function renderStepper() {
+    stepperEl.innerHTML = lines.map(l => `
+      <div class="step-line flex items-start gap-2.5 px-3 py-2 rounded-lg bg-white/5 border border-white/5">
+        <span class="shrink-0">${l.icon}</span>
+        <span class="${l.color} leading-snug">${l.text}</span>
+      </div>
+    `).join('');
+  }
+
+  function tick() {
+    lines.push(steps[stepIndex]);
+    if (lines.length > 4) lines.shift();
+    renderStepper();
+    stepIndex = (stepIndex + 1) % steps.length;
+
+    // Pause longer after the final "sent" step before looping, so it reads
+    // as a completed cycle rather than a frantic scroll.
+    const delay = stepIndex === 0 ? 2600 : 1500;
+    setTimeout(tick, delay);
+  }
+  tick();
+
+  // ---------- Star rating ----------
+  const starButtons = document.querySelectorAll('.star-btn');
+  const ratingInput = document.getElementById('rating-input');
+  let currentRating = 0;
+
+  function paintStars(rating) {
+    starButtons.forEach(btn => {
+      const val = parseInt(btn.dataset.star, 10);
+      btn.classList.toggle('text-amber-400', val <= rating);
+      btn.classList.toggle('text-zinc-300', val > rating);
+    });
+  }
+
+  starButtons.forEach(btn => {
+    btn.addEventListener('mouseenter', () => paintStars(parseInt(btn.dataset.star, 10)));
+    btn.addEventListener('mouseleave', () => paintStars(currentRating));
+    btn.addEventListener('click', () => {
+      currentRating = parseInt(btn.dataset.star, 10);
+      ratingInput.value = currentRating;
+      paintStars(currentRating);
+    });
+  });
+
+  // ---------- Experience form submit ----------
+  const experienceForm = document.getElementById('experience-form');
+  const experienceFields = document.getElementById('experience-form-fields');
+  const experienceSuccess = document.getElementById('experience-success');
+
+  experienceForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const endpointConfigured = !experienceForm.action.includes('YOUR_FORMSPREE_ENDPOINT');
+
+    if (endpointConfigured) {
+      try {
+        await fetch(experienceForm.action, {
+          method: 'POST',
+          body: new FormData(experienceForm),
+          headers: { Accept: 'application/json' },
+        });
+      } catch {
+        // Even on a network hiccup, still show the thank-you state below —
+        // don't punish someone who just wrote a nice story with an error
+        // message they can't do anything about.
+      }
+    }
+
+    experienceFields.classList.add('hidden');
+    experienceSuccess.classList.remove('hidden');
+  });
+</script>
+
+</body>
+</html>
